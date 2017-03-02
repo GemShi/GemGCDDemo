@@ -25,13 +25,50 @@
 //    [self semaphore];
     
     //延迟执行
-    [self delayRun];
+//    [self delayRun];
+    
+    //暂停和继续队列
+    [self suspendAndResume];
     
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 暂停和继续队列
+-(void)suspendAndResume
+{
+    /**
+     dispatch_suspend函数挂起指定的DispatchQueue
+     dispatch_resume函数恢复指定的DispatchQueue
+     */
+    dispatch_queue_t queue = dispatch_queue_create("test", DISPATCH_QUEUE_SERIAL);
+    dispatch_async(queue, ^{
+        [NSThread sleepForTimeInterval:5];
+        NSLog(@"After 5 seconds");
+    });
+    dispatch_async(queue, ^{
+        [NSThread sleepForTimeInterval:5];
+        NSLog(@"After 5 seconds again");
+    });
+    NSLog(@"sleep 1 second");
+    [NSThread sleepForTimeInterval:1];
+    NSLog(@"suspend");
+    dispatch_suspend(queue);
+    NSLog(@"sleep 10 seconds");
+    [NSThread sleepForTimeInterval:10];
+    NSLog(@"resume");
+    dispatch_resume(queue);
+    /**运行结果
+     1' ------sleep 1 second
+     2' ------suspend
+     2' ------sleep 10 seconds
+     6' ------After 5 seconds
+     12'------resume
+     17'------After 5 seconds again
+     */
 }
 
 #pragma mark - 延迟执行
