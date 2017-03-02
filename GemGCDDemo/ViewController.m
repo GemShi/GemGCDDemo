@@ -17,13 +17,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    //信号量
+    [self semaphore];
+    
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - 信号量
+-(void)semaphore
+{
+    
+}
 
 @end
