@@ -15,6 +15,7 @@
 		DF2531961E6837C7004D77AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF2531941E6837C7004D77AD /* LaunchScreen.storyboard */; };
 		DF2531A11E6837C7004D77AD /* GemGCDDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF2531A01E6837C7004D77AD /* GemGCDDemoTests.m */; };
 		DF2531AC1E6837C7004D77AD /* GemGCDDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF2531AB1E6837C7004D77AD /* GemGCDDemoUITests.m */; };
+		DF2531BB1E684CCC004D77AD /* ImitateRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DF2531BA1E684CCC004D77AD /* ImitateRequestManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		DF2531A71E6837C7004D77AD /* GemGCDDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GemGCDDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF2531AB1E6837C7004D77AD /* GemGCDDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GemGCDDemoUITests.m; sourceTree = "<group>"; };
 		DF2531AD1E6837C7004D77AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF2531B91E684CCC004D77AD /* ImitateRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImitateRequestManager.h; sourceTree = "<group>"; };
+		DF2531BA1E684CCC004D77AD /* ImitateRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImitateRequestManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +108,8 @@
 				DF25318A1E6837C7004D77AD /* AppDelegate.m */,
 				DF25318C1E6837C7004D77AD /* ViewController.h */,
 				DF25318D1E6837C7004D77AD /* ViewController.m */,
+				DF2531B91E684CCC004D77AD /* ImitateRequestManager.h */,
+				DF2531BA1E684CCC004D77AD /* ImitateRequestManager.m */,
 				DF25318F1E6837C7004D77AD /* Main.storyboard */,
 				DF2531921E6837C7004D77AD /* Assets.xcassets */,
 				DF2531941E6837C7004D77AD /* LaunchScreen.storyboard */,
@@ -276,6 +281,7 @@
 				DF25318E1E6837C7004D77AD /* ViewController.m in Sources */,
 				DF25318B1E6837C7004D77AD /* AppDelegate.m in Sources */,
 				DF2531881E6837C7004D77AD /* main.m in Sources */,
+				DF2531BB1E684CCC004D77AD /* ImitateRequestManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
