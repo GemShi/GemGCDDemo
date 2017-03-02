@@ -24,11 +24,23 @@
     //信号量
 //    [self semaphore];
     
+    //延迟执行
+    [self delayRun];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 延迟执行
+-(void)delayRun
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLog(@"------dispatch_after------");
+    });
+    NSLog(@"%s",__func__);
 }
 
 -(void)createUI
