@@ -20,6 +20,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     [self createUI];
+    NSLog(@"%@",[NSThread mainThread]);
     
     //信号量
 //    [self semaphore];
@@ -28,13 +29,40 @@
 //    [self delayRun];
     
     //暂停和继续队列
-    [self suspendAndResume];
+//    [self suspendAndResume];
+    
+    //同步
+    
+    //异步
+    [self AsyncRequest];
+    
+    //组
     
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 异步请求
+-(void)AsyncRequest
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"start-1");
+        [NSThread sleepForTimeInterval:3];
+        NSLog(@"end-1");
+    });
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"start-2");
+        [NSThread sleepForTimeInterval:3];
+        NSLog(@"end-2");
+    });
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"start-3");
+        [NSThread sleepForTimeInterval:3];
+        NSLog(@"end-3");
+    });
 }
 
 #pragma mark - 暂停和继续队列
