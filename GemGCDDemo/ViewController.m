@@ -32,17 +32,152 @@
 //    [self suspendAndResume];
     
     //同步
+//    [self SyncRequest];
     
     //异步
-    [self AsyncRequest];
+//    [self AsyncRequest];
     
     //组
+//    [self dispatchGroup];
+    
+    //组的应用，异步请求，统一回调
+//    [self groupRequest];
+    
+    //apply
+//    [self dispatchApply];
+    [self ImitateForCycle];
     
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 批量执行
+/**
+ dispatch_apply函数是dispatch_sync函数和Dispatch Group的关联API,该函数按指定的次数将指定的Block追加到指定的Dispatch Queue中,并等到全部的处理执行结束
+ */
+-(void)dispatchApply
+{
+    dispatch_apply(10, dispatch_get_global_queue(0, 0), ^(size_t index) {
+        NSLog(@"%zu",index);
+    });
+}
+
+//模拟for循环
+//在dispatch_async函数中异步执行dispatch_apply函数,模拟dispatch_sync的同步效果
+-(void)ImitateForCycle
+{
+    NSArray *array = @[@"a", @"b", @"c", @"d", @"e", @"f", @"g", @"h", @"i", @"j"];
+    dispatch_queue_t queue = dispatch_get_global_queue(0, 0);
+    dispatch_async(queue, ^{
+        dispatch_apply(array.count, queue, ^(size_t index) {
+            NSLog(@"%zu------%@",index,[array objectAtIndex:index]);
+            [NSThread sleepForTimeInterval:2];
+        });
+    });
+}
+
+#pragma mark - 异步请求，统一回调
+-(void)groupRequest
+{
+    dispatch_queue_t queue = dispatch_queue_create("EnterAndLeave", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter(group);
+    [self request1:^{
+        NSLog(@"request1-done");
+        dispatch_group_leave(group);
+    }];
+    dispatch_group_enter(group);
+    [self request2:^{
+        NSLog(@"request2-done");
+        dispatch_group_leave(group);
+    }];
+    dispatch_group_notify(group, queue, ^{
+        NSLog(@"All task over");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"%@",[NSThread currentThread]);
+        });
+    });
+}
+
+-(void)request1:(void(^)())block
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSLog(@"request1-start");
+        [NSThread sleepForTimeInterval:3];
+        if (block) {
+            block();
+        }
+    });
+}
+
+-(void)request2:(void(^)())block
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSLog(@"request2-start");
+        [NSThread sleepForTimeInterval:3];
+        if (block) {
+            block();
+        }
+    });
+}
+
+#pragma mark - 组队列
+/**
+ group结束的两种方式
+ 1.dispatch_group_wait(group,dispatch_time());
+ 阻塞当前线程，直到dispatch_group所有任务完成返回
+ 2.dispatch_group_notify(group,queue,block);
+ 不会阻塞当前线程，所有组执行完后会立即返回
+ */
+-(void)dispatchGroup
+{
+    //异步执行，统一回调------可以管理多个webService
+    dispatch_queue_t queue = dispatch_queue_create("group", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_async(group, queue, ^{
+        NSLog(@"start-1");
+        [NSThread sleepForTimeInterval:2];
+        NSLog(@"end-1");
+    });
+    dispatch_group_async(group, queue, ^{
+        NSLog(@"start-2");
+        [NSThread sleepForTimeInterval:2];
+        NSLog(@"end-2");
+    });
+    dispatch_group_async(group, queue, ^{
+        //前两组暂停2秒，该组暂停5秒，所以比前两组晚3秒执行
+        dispatch_group_wait(group, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
+        NSLog(@"dispatch_group_wait");
+    });
+    dispatch_group_notify(group, queue, ^{
+        NSLog(@"All task over");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"%@",[NSThread currentThread]);
+        });
+    });
+}
+
+#pragma mark - 同步请求
+-(void)SyncRequest
+{
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"start-1");
+        [NSThread sleepForTimeInterval:3];
+        NSLog(@"end-1");
+    });
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"start-2");
+        [NSThread sleepForTimeInterval:3];
+        NSLog(@"end-2");
+    });
+    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSLog(@"start-3");
+        [NSThread sleepForTimeInterval:3];
+        NSLog(@"end-3");
+    });
 }
 
 #pragma mark - 异步请求
